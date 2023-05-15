@@ -18,6 +18,7 @@
 - PUT: http://localhost:4000/api/users/{uuid} is used to update user with id uuid with given body
 - DELETE: http://localhost:4000/api/users/{uuid} is used to delete user with is uuid
 
+- [Example]: GET: http://localhost:4000/api/users/9dc3ecdc-13b3-4d13-90df-f9df7447c866 will return data of user with the given id.
 
 ## Running the test scenarios
 - npm run test-1
