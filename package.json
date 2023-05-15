@@ -5,12 +5,27 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "start:dev": "nodemon index.js",
+    "start:prod": "npm run build && node ./dist/bundle.cjs",
+    "build": "webpack --config webpack.config.js --mode production",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test-1": "node tests/i-test.js",
+    "test-2": "node tests/ii-test.js",
+    "test-3": "node tests/iii-test.js"
+    
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.0.3",
     "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "nodemon": "^2.0.22",
+    "webpack": "^5.82.1",
+    "webpack-cli": "^5.1.1"
   }
 }

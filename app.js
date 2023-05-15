@@ -1,56 +1,52 @@
 import http from "http";
 import { v4 as uuidv4, validate } from "uuid";
+import dotenv from "dotenv";
+dotenv.config();
 
 let dataBase = [
-    {
-        id: '928b2b1b-72ba-4e5a-9643-98a6b06e8877',
-        username: 'bekki0',
-        age: 20,
-        hobbies: [ 'play22', 'sing2' ]
-      },
-      {
-        id: 'f511a7ff-9d81-4a77-a32c-9367c6ced677',
-        username: 'bekki1',
-        age: 22,
-        hobbies: [ 'play', 'coding' ]
-      },
-      {
-        id: 'ce5a3c43-457f-436f-944c-7d9af936dae8',
-        username: 'bekki2',
-        age: 20,
-        hobbies: [ 'play', 'coding' ]
-      },
-      {
-        id: '998c2e3a-8782-4ad3-9eb7-5d341e4da8f5',
-        username: 'bekki3',
-        age: 20,
-        hobbies: [ 'play', 'coding' ]
-      },
-      {
-        id: '615d8694-6368-4d9f-9071-36ff5cb7b974',
-        username: 'bekki4',
-        age: 20,
-        hobbies: [ 'play', 'coding' ]
-      }    
+    // {
+    //     id: '928b2b1b-72ba-4e5a-9643-98a6b06e8877',
+    //     username: 'bekki0',
+    //     age: 20,
+    //     hobbies: [ 'play22', 'sing2' ]
+    //   },
+    //   {
+    //     id: 'f511a7ff-9d81-4a77-a32c-9367c6ced677',
+    //     username: 'bekki1',
+    //     age: 22,
+    //     hobbies: [ 'play', 'coding' ]
+    //   },
+    //   {
+    //     id: 'ce5a3c43-457f-436f-944c-7d9af936dae8',
+    //     username: 'bekki2',
+    //     age: 20,
+    //     hobbies: [ 'play', 'coding' ]
+    //   },
+    //   {
+    //     id: '998c2e3a-8782-4ad3-9eb7-5d341e4da8f5',
+    //     username: 'bekki3',
+    //     age: 20,
+    //     hobbies: [ 'play', 'coding' ]
+    //   },
+    //   {
+    //     id: '615d8694-6368-4d9f-9071-36ff5cb7b974',
+    //     username: 'bekki4',
+    //     age: 20,
+    //     hobbies: [ 'play', 'coding' ]
+    //   }    
 ];
 
 const server = http.createServer((req, res) => {
     //GET ALL USERS
-    if (req.url === "/users" && req.method === "GET") {
-        if (dataBase.length) {
+    if (req.url === "/api/users" && req.method === "GET") {
             res.writeHead(200);
             res.write(JSON.stringify(dataBase));
             res.end();
-        } else {
-            res.writeHead(200);
-            res.write("Database is empty, please create user first");
-            res.end();
-        }
     }
 
     //GET SPECIFIC USER
-    else if (req.url.startsWith("/users/") && req.method === "GET") {
-        const userId = req.url.split("/")[2];
+    else if (req.url.startsWith("/api/users/") && req.method === "GET") {
+        const userId = req.url.split("/")[3];
         if (!validate(userId)) {
             res.writeHead(400);
             res.write("Invalid UUID");
@@ -76,7 +72,7 @@ const server = http.createServer((req, res) => {
     }
 
     //CREATE A USER
-    else if (req.url === "/users" && req.method === "POST") {
+    else if (req.url === "/api/users" && req.method === "POST") {
         let username;
         let age;
         let hobbies;
@@ -110,8 +106,8 @@ const server = http.createServer((req, res) => {
     }
 
     //UPDATE A USER
-    else if (req.url.startsWith("/users/") && req.method === "PUT") {
-        const userId = req.url.split("/")[2];
+    else if (req.url.startsWith("/api/users/") && req.method === "PUT") {
+        const userId = req.url.split("/")[3];
         if (!validate(userId)) {
             console.log("Invalid UUID");
             res.writeHead(400);
@@ -162,7 +158,7 @@ const server = http.createServer((req, res) => {
     }
 
     // DELETE A USER
-    else if (req.url.startsWith("/users/") && req.method === "DELETE") {
+    else if (req.url.startsWith("/api/users/") && req.method === "DELETE") {
         const userId = req.url.split("/")[2];
         if (!validate(userId)) {
             console.log("Invalid UUID");
@@ -193,11 +189,21 @@ const server = http.createServer((req, res) => {
     //WRONG ROUTE ENTERED
     else{
         console.log("Wrong route");
-        res.end("Wrong route")
+        res.writeHead(404);
+        res.write("Non-existing route :(")
+        res.end();
     }
 
 });
 
-server.listen(4000, () => {
-    console.log("Server running on port 4000");
+
+
+let PORT = process.env.PORT;
+if(PORT == null || PORT == "")
+{
+    console.log("PORT not found in .env");
+    PORT=4000;
+}
+server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
