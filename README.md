@@ -2,6 +2,9 @@
 
 ### All operation are working.
 
+## Install dependencies
+- npm install
+
 ## Start server
 - npm run start:dev (start server in development mode).
 - npm run start:prod (start server in production mode).
