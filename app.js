@@ -33,15 +33,15 @@ let dataBase = [
     //     username: 'bekki4',
     //     age: 20,
     //     hobbies: [ 'play', 'coding' ]
-    //   }    
+    //   }
 ];
 
 const server = http.createServer((req, res) => {
     //GET ALL USERS
     if (req.url === "/api/users" && req.method === "GET") {
-            res.writeHead(200);
-            res.write(JSON.stringify(dataBase));
-            res.end();
+        res.writeHead(200);
+        res.write(JSON.stringify(dataBase));
+        res.end();
     }
 
     //GET SPECIFIC USER
@@ -139,7 +139,12 @@ const server = http.createServer((req, res) => {
                             );
                             res.end();
                         } else {
-                            dataBase[index]= {id: userId, username: username, age: age, hobbies: hobbies};
+                            dataBase[index] = {
+                                id: userId,
+                                username: username,
+                                age: age,
+                                hobbies: hobbies,
+                            };
                             res.writeHead(200);
                             res.write(JSON.stringify(dataBase[index]));
                             res.end();
@@ -159,7 +164,7 @@ const server = http.createServer((req, res) => {
 
     // DELETE A USER
     else if (req.url.startsWith("/api/users/") && req.method === "DELETE") {
-        const userId = req.url.split("/")[2];
+        const userId = req.url.split("/")[3];
         if (!validate(userId)) {
             console.log("Invalid UUID");
             res.writeHead(400);
@@ -170,9 +175,9 @@ const server = http.createServer((req, res) => {
             dataBase.forEach((user, index) => {
                 if (user.id == userId) {
                     isUserFound = true;
-                    ////////////////
+                    dataBase.splice(index, 1);
                     console.log("Deleting user with ID, index", userId, index);
-                    
+
                     res.writeHead(204);
                     res.end();
                 }
@@ -187,22 +192,18 @@ const server = http.createServer((req, res) => {
     }
 
     //WRONG ROUTE ENTERED
-    else{
+    else {
         console.log("Wrong route");
         res.writeHead(404);
-        res.write("Non-existing route :(")
+        res.write("Non-existing route :(");
         res.end();
     }
-
 });
 
-
-
 let PORT = process.env.PORT;
-if(PORT == null || PORT == "")
-{
+if (PORT == null || PORT == "") {
     console.log("PORT not found in .env");
-    PORT=4000;
+    PORT = 4000;
 }
 server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
